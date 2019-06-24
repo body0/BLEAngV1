@@ -1,0 +1,15 @@
+
+
+.graph{
+    padding: 1em 0 0 0;
+    margin: auto;
+    width: 95%;
+    height: 40vh;
+}
+.graph > div{
+    
+}
+.graphConectionLost > div::before{
+    content: "WARNING: CONECTION LOST";
+    color: red;
+}

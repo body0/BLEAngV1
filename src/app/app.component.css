@@ -1,0 +1,49 @@
+:root{
+    --greyCol: grey;
+}
+mat-toolbar{
+    margin-bottom: 1rem;
+}
+#rootElm{
+    height: 100%;
+    width: 100%;
+    background-color: goldenrod;
+}
+
+#noDeviceSelected > div{
+    font-size: 3rem;
+    color: var(greyCol);
+}
+#noDeviceSelected > div > p{
+    text-align: center;
+    margin: 0.2em 0;
+}
+
+.floating{
+    width: 90vw;
+    padding: 1vw;
+    margin: auto;
+    background-color: rgba(230, 230, 230, 0.8);
+}
+
+.fixedButtonCircle{
+    position: fixed;
+    width: 20vw;
+    height: 20vw;
+    bottom: 5vw;
+    right: 5vw;
+    border-radius: 50%;
+    background-color: #4AA82E; 
+    box-shadow:  2px 2px 6px#555555;
+
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+.content{
+    margin: auto;
+    width:15vw;
+    height:15vw;
+    display: flex;
+    align-items: stretch;
+}
