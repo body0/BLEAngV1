@@ -3,8 +3,8 @@
     <mat-toolbar>
         <span>My Application</span>
       </mat-toolbar>
-  <div *ngIf="showDevice" class="floating">
-      <app-ble-device-info>
+  <div *ngIf="showDevice" >
+      <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo">
       </app-ble-device-info>
   </div>
 

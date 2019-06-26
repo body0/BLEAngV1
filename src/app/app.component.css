@@ -1,6 +1,4 @@
-:root{
-    --greyCol: grey;
-}
+
 mat-toolbar{
     margin-bottom: 1rem;
 }
@@ -19,13 +17,6 @@ mat-toolbar{
     margin: 0.2em 0;
 }
 
-.floating{
-    width: 90vw;
-    padding: 1vw;
-    margin: auto;
-    background-color: rgba(230, 230, 230, 0.8);
-}
-
 .fixedButtonCircle{
     position: fixed;
     width: 20vw;
@@ -33,7 +24,7 @@ mat-toolbar{
     bottom: 5vw;
     right: 5vw;
     border-radius: 50%;
-    background-color: #4AA82E; 
+    background-color: rgba(230, 230, 230, 1.0);
     box-shadow:  2px 2px 6px#555555;
 
     display: flex;

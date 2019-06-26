@@ -1,12 +1,20 @@
 <div>
-
-</div>
-
-<div>
-  <div class="graph graphConectionLost">
-      <app-real-time-graph>
-      
-       </app-real-time-graph>
+  <div class="floating" id="basicInfo">
+    <div>
+      <h2 class="underline" style="margin-bottom: 0.5rem;">Name: {{DeviceInfo.name}}</h2>
+      <p>Description:</p>
+      <p style="margin-left: 2rem;">{{DeviceInfo.description}}</p>
+    </div>
   </div>
-    
+
+  <div class="floating">
+    <div class="graph">
+      <div *ngIf="BrokenConection" class="graphConectionLost">
+        <p>WARNING: CONECTION LOST</p>
+      </div>
+      <app-real-time-graph class="graphData">
+      </app-real-time-graph>
+    </div>
+
+  </div>
 </div>

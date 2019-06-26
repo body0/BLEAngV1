@@ -63,7 +63,9 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "BLE:build:production"
+              "browserTarget": "BLE:build:production",
+              "sslKey": "/home/nykl/Documents/WEB/KEY/localhost.key",
+              "sslCert": "/home/nykl/Documents/WEB/KEY/localhost.cnf"
             }
           }
         },
