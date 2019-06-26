@@ -13,8 +13,12 @@ export class BleDeviceInfoComponent implements OnInit {
   private BrokenConection;
   private bleTimer:any; //setInterval
 
+  private Hum:number;
+  private Temp:number;
+
   constructor() { 
-    
+    /* this.Hum = 0;
+    this.Temp = 0; */
   }
 
   ngOnInit() {
@@ -27,7 +31,7 @@ export class BleDeviceInfoComponent implements OnInit {
       .then( (data:number) => {
         console.log(data + " a");
         //update graph
-        sub.BrokenConection = false;
+        this.Temp = data;
       })
       .catch( (err) => {
         console.warn(err);

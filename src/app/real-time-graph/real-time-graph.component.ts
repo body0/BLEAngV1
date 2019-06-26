@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import * as Plotly from 'plotly.js';
 
 @Component({
   selector: 'app-real-time-graph',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RealTimeGraphComponent implements OnInit {
 
+  GraphElm;
+
+  @Input("Data")
+  set Data(Data) {
+    Plotly.extendTraces(this.GraphElm, { y: [[Data]] }, [0]);
+  }
+
   constructor() { }
 
   ngOnInit() {
+    this.GraphElm = document.getElementById('root');
+    Plotly.plot('root', [{
+      y: []
+    }], {
+      margin: { t: 0 }
+    }, { 
+      responsive: true 
+    });
   }
 
 }
