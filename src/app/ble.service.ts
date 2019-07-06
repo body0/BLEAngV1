@@ -8,11 +8,19 @@ export class BleService {
   DEVICE_ADRESS: string;
   TEMPRATURE_DESCRIPTOR_ADDRES: string;
   HUMIDYTY_DESCRIPTOR_ADDRES: string;
+  LED_DESCRIPTOR_ADDRES: string;
 
   constructor() {
-    this.DEVICE_ADRESS = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+    /* this.DEVICE_ADRESS = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
     this.TEMPRATURE_DESCRIPTOR_ADDRES =  'beb5483e-36e1-4688-b7f5-ea07361b26a8';
     this.HUMIDYTY_DESCRIPTOR_ADDRES = '578798ab-8ab0-4826-8736-a5d7a8d4be3f';
+    this.LED_DESCRIPTOR_ADDRES = '0278a5b0-bb22-46de-afcd-3e9e3ada667a'; */
+
+    this.DEVICE_ADRESS =                "4a981800-1cc4-e7c1-c757-f1267dd021e8"
+    this.TEMPRATURE_DESCRIPTOR_ADDRES = "4a982a00-1cc4-e7c1-c757-f1267dd021e8"
+    this.HUMIDYTY_DESCRIPTOR_ADDRES =   "4a982a01-1cc4-e7c1-c757-f1267dd021e8"
+    this.LED_DESCRIPTOR_ADDRES =        "4a982a37-1cc4-e7c1-c757-f1267dd021e8"
+    
   }
 
   public async search(): Promise<BluttotDeviceInfo> {
@@ -26,14 +34,16 @@ export class BleService {
     })
     var server = await device.gatt.connect();
     var service = await server.getPrimaryService(this.DEVICE_ADRESS);
+    var xcx = await service.getCharacteristics();
     var characteristicks = await Promise.all([
       service.getCharacteristic(this.TEMPRATURE_DESCRIPTOR_ADDRES),
-      service.getCharacteristic(this.HUMIDYTY_DESCRIPTOR_ADDRES)
+      service.getCharacteristic(this.HUMIDYTY_DESCRIPTOR_ADDRES),
+      service.getCharacteristic(this.LED_DESCRIPTOR_ADDRES)
     ]);
 
     var deviceDescription: BluttotDeviceInfo = {
       name: device.name,
-      description: "TEST",
+      description: "TEST DEVICE: esp32 with senzor DHT11 (presure and tempreture) and led diod",
       getTemperatureData: async () => {
         var rawData = await characteristicks[0].readValue();
         var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
@@ -47,12 +57,27 @@ export class BleService {
         //console.log(rawData.getUint8(0))
         //console.log(strData)
         return parseFloat(strData);
+      },
+      getLedData: async () => {
+        var rawData = await characteristicks[2].readValue();
+        var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
+        //console.log(rawData.getUint8(0))
+        console.log(strData)
+        return (strData == '1') ? true : false;
+      },
+      setLedData: (state:boolean) => {
+        var enc = new TextEncoder();
+        if(state)
+          characteristicks[2].writeValue(enc.encode("1"));
+        else
+          characteristicks[2].writeValue(enc.encode("0"));
       }
     };
     return deviceDescription;
   }
 
-  public async monkSearch(): Promise<BluttotDeviceInfo> {
+  public monkSearch(): BluttotDeviceInfo {
+    var ledState = false;
     var bleDeviceInfo: BluttotDeviceInfo = {
       name: "test device",
       description: "Test data, deta generated randomly.",
@@ -61,7 +86,14 @@ export class BleService {
       },
       getHumidytyData: async () => {
         return Math.floor(Math.random() * 20) - 10;
+      },
+      getLedData: async () => {
+        return ledState;
+      },
+      setLedData: (state:boolean) => {
+        ledState = state;
       }
+
     }
 
     return bleDeviceInfo;
@@ -73,6 +105,8 @@ export interface BluttotDeviceInfo {
   description: string;
   getTemperatureData: () => Promise<number>;
   getHumidytyData: () => Promise<number>;
+  getLedData: () => Promise<boolean>;
+  setLedData: (state:boolean) => void;
 }
 
 

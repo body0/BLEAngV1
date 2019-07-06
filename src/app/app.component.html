@@ -1,33 +1,45 @@
-
-<div id="rootElm">
-    <mat-toolbar>
-        <span>My Application</span>
-      </mat-toolbar>
-  <div *ngIf="showDevice" >
-      <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo">
-      </app-ble-device-info>
-  </div>
-
-  <div *ngIf="!showDevice" class="floating">
-    <div id="noDeviceSelected">
-      <div>
-        <p>
-          No device selected
-        </p>
+<app-side-bar>
+    <div id="rootElm" class="textgray">
+        <!-- <mat-toolbar color="primary" style="font-size: 1.35rem;">
+            <button style="padding-right: 2.5rem;" mat-icon-button aria-label="Side menu" (click)="showMenu()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>Joito Blutooth scanner</span>
+          </mat-toolbar> -->
+      <div *ngIf="showDevice" >
+          <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo">
+          </app-ble-device-info>
       </div>
+    
+      <div *ngIf="!showDevice" class="floating" >
+        <div id="noDeviceSelected">
+          <div>
+            <p>
+              No device selected
+            </p>
+          </div>
+        </div>
+      </div>
+      <div style="height: 15vw;"></div>
     </div>
-  </div>
-</div>
+  </app-side-bar>
+
+
+<!-- <div id="sidebar">
+    lorem ipsum ajlfsdiihaf;jfofjdifd;djifsbdsfadbslnaddbkldf sns
+</div> -->
 
 
 
-
-
-<button mat-mini-fab class="fixedButtonCircle" (click)="searchDevice()"><!-- fixed main button  -->
+<!-- <button mat-mini-fab color="accent" class="fixedButtonCircle" (click)="searchDevice()">
   <div style="width:20vw">
     <div class="content">
       <img src="../../assets/img/baseline-search-24px.svg" alt="brk" style="
         width:15vw;">
     </div>
   </div>
+</button> -->
+
+<button mat-mini-fab color="accent" class="fixedButtonCircle" (click)="searchDevice()"><!-- fixed main button  -->
+  <mat-icon style="display: inline; font-size: 3.5rem;">search</mat-icon>
 </button>

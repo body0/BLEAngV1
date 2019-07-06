@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
 import { BluttotDeviceInfo } from '../ble.service';
+import { RealTimeGraphComponent } from '../real-time-graph/real-time-graph.component';
 
 @Component({
   selector: 'app-ble-device-info',
@@ -7,21 +8,31 @@ import { BluttotDeviceInfo } from '../ble.service';
   styleUrls: ['./ble-device-info.component.css', './../app.global-css-classes.css']
 })
 export class BleDeviceInfoComponent implements OnInit {
+  @ViewChildren (RealTimeGraphComponent)
+  GraphsRef: QueryList<RealTimeGraphComponent>;
+
 
   @Input("bleDeviceInfo")
   private DeviceInfo:BluttotDeviceInfo;
   private BrokenConection;
   private bleTimer:any; //setInterval
+  private ledState:boolean = false;
 
-  private Hum:number;
-  private Temp:number;
+  /* private Hum:number;
+  private Temp:number; */
 
   constructor() { 
     /* this.Hum = 0;
-    this.Temp = 0; */
+    this.Temp = 0; */ 
+  }
+
+  changeLedState(){
+    this.DeviceInfo.setLedData(!this.ledState);
+    this.ledState = !this.ledState;
   }
 
   ngOnInit() {
+    this.DeviceInfo.getLedData().then( data => { this.ledState = data; });
     this.bleTimer = setInterval(bleTimerCallack, 1000); 
     console.log(this.DeviceInfo);
 
@@ -29,9 +40,10 @@ export class BleDeviceInfoComponent implements OnInit {
     function bleTimerCallack(){
       sub.DeviceInfo.getTemperatureData()
       .then( (data:number) => {
-        console.log(data + " a");
+        //console.log(sub.Temp, " a");
         //update graph
-        this.Temp = data;
+        //sub.Temp = data;
+        sub.GraphsRef.first.writeDataToGraph(data);
       })
       .catch( (err) => {
         console.warn(err);
@@ -41,9 +53,10 @@ export class BleDeviceInfoComponent implements OnInit {
 
       sub.DeviceInfo.getHumidytyData()
       .then( (data:number) => {
-        console.log(data + " b");
+       //console.log(data, " b");
         //update graph
-        sub.BrokenConection = false;
+        //sub.Hum  = data;
+        sub.GraphsRef.toArray()[1].writeDataToGraph(data);
       })
       .catch( (err) => {
         console.warn(err);
@@ -52,5 +65,4 @@ export class BleDeviceInfoComponent implements OnInit {
       });
     }
   }
-
 }

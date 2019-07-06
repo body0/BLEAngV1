@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BluttotDeviceInfo, BleService } from './ble.service';
 
 @Component({
@@ -6,14 +6,28 @@ import { BluttotDeviceInfo, BleService } from './ble.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css', './app.global-css-classes.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'BLE';
 
   showDevice: boolean = false;
   bleDeviceInfo:BluttotDeviceInfo;
+
+  sideMenuID:string = "sidebar";
+  sideMenuMaxWidth:string = "45wv";
+  sideMenuElm:Element;
+
   constructor(
     private bleService:BleService
-  ){}
+  ){
+    this.bleDeviceInfo = this.bleService.monkSearch();
+
+    //ONLY FOR TEST 
+    //this.showDevice = true;
+  }
+
+  ngOnInit(): void {
+    this.sideMenuElm = document.getElementById(this.sideMenuID);
+  }
 
   searchDevice():void{
     const sub = this;
@@ -23,6 +37,9 @@ export class AppComponent {
       sub.showDevice = !sub.showDevice;
     })
 
+  }
+  showMenu():void{
+    this.sideMenuElm.setAttribute("style", 'width: ' + this.sideMenuMaxWidth + ";")
   }
     
 }

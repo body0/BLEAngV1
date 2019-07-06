@@ -1,20 +1,43 @@
 <div>
   <div class="floating" id="basicInfo">
-    <div>
-      <h2 class="underline" style="margin-bottom: 0.5rem;">Name: {{DeviceInfo.name}}</h2>
-      <p>Description:</p>
+    <div class="textgray">
+      <h2 class="underline" style="margin-bottom: 0.3rem;">Name: {{DeviceInfo.name}}</h2>
+      <p style="font-weight: bold; margin-bottom: 0.6em;">Description:</p>
       <p style="margin-left: 2rem;">{{DeviceInfo.description}}</p>
+    </div>
+    <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="!ledState">
+      Turn On LED
+    </button>
+    <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="ledState">
+      Turn Off LED
+    </button>
+  </div>
+
+  <div class="floating">
+    <div class="graphName">
+      <p>TEMPERATURE:</p>
+    </div>
+    <div *ngIf="BrokenConection" class="graphConectionLost">
+      <p>WARNING: CONECTION LOST</p>
+    </div>
+    <div class="graph">
+      <app-real-time-graph class="graphData">
+      </app-real-time-graph>
     </div>
   </div>
 
   <div class="floating">
+    <div class="graphName">
+      <p>HUMIDYTY:</p>
+    </div>
+    <div *ngIf="BrokenConection" class="graphConectionLost">
+      <p>WARNING: CONECTION LOST</p>
+    </div>
     <div class="graph">
-      <div *ngIf="BrokenConection" class="graphConectionLost">
-        <p>WARNING: CONECTION LOST</p>
-      </div>
-      <app-real-time-graph class="graphData" [Data]="Temp">
+      <app-real-time-graph class="graphData">
       </app-real-time-graph>
     </div>
-
   </div>
+
+
 </div>

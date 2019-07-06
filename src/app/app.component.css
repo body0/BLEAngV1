@@ -1,11 +1,19 @@
 
 mat-toolbar{
     margin-bottom: 1rem;
+    
 }
-#rootElm{
+mat-toolbar span{
+    color: #404040;
+}
+/* #rootElm{
     height: 100%;
     width: 100%;
     background-color: goldenrod;
+} */
+
+.mat-icon {
+    font-size: 2rem;
 }
 
 #noDeviceSelected > div{
@@ -19,22 +27,34 @@ mat-toolbar{
 
 .fixedButtonCircle{
     position: fixed;
-    width: 20vw;
-    height: 20vw;
+    width: 5rem;
+    height: 5rem;
     bottom: 5vw;
     right: 5vw;
     border-radius: 50%;
-    background-color: rgba(230, 230, 230, 1.0);
+    /* background-color: rgba(230, 230, 230, 1.0); */
     box-shadow:  2px 2px 6px#555555;
+    /* padding: 0.5em; */
+    /* font-size: 5rem; */
 
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     z-index: 10;
 }
-.content{
+/* .content{
     margin: auto;
     width:15vw;
     height:15vw;
     display: flex;
     align-items: stretch;
+} */
+
+#sidebar{
+    background: #DDDDDD;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 65vw;
+    height: 100vh;
+    overflow: hidden;
 }

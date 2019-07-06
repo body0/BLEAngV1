@@ -3,11 +3,22 @@
     margin: 2vw;
 }
 
-.graph{
+/* p{
+    color: #ff7961;
+}
+ */
+.floating{
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
+}
+button{
+    margin: 0.5rem auto;
+    padding: .1em 1em;
+    font-size: 1.5rem;
+}
+.graph{
     height: 40vh;
 }
 
@@ -18,6 +29,10 @@
 .graphConectionLost *{
     margin: 0;
     color: red;
+}
+.graphName{
+    margin: 0;
+    padding: 0 .8rem 1rem .8rem;
 }
 
 .graphData{
