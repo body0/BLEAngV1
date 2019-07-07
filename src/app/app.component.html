@@ -1,4 +1,4 @@
-<app-side-bar>
+<app-side-bar (userAction)="onUserAction($event)">
     <div id="rootElm" class="textgray">
         <!-- <mat-toolbar color="primary" style="font-size: 1.35rem;">
             <button style="padding-right: 2.5rem;" mat-icon-button aria-label="Side menu" (click)="showMenu()">
@@ -16,6 +16,9 @@
           <div>
             <p>
               No device selected
+            </p>
+            <p style="font-size: 0.5em;">
+              Press search button to select device
             </p>
           </div>
         </div>

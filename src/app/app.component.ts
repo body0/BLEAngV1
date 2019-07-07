@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BluttotDeviceInfo, BleService } from './ble.service';
+import { userActionEventEnum } from './side-bar/side-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,20 @@ export class AppComponent implements OnInit {
   }
   showMenu():void{
     this.sideMenuElm.setAttribute("style", 'width: ' + this.sideMenuMaxWidth + ";")
+  }
+
+  onUserAction(event:userActionEventEnum){
+    switch(event){
+      case userActionEventEnum.Search:
+        this.searchDevice();
+        break;
+      case userActionEventEnum.Reconect:
+        this.bleService.reconect();
+        break;
+      case userActionEventEnum.Disconect:
+        this.bleService.disconect();
+        break;
+    }
   }
     
 }

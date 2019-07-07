@@ -1,16 +1,18 @@
-<div>
+<div id="rootgrid">
   <div class="floating" id="basicInfo">
     <div class="textgray">
       <h2 class="underline" style="margin-bottom: 0.3rem;">Name: {{DeviceInfo.name}}</h2>
       <p style="font-weight: bold; margin-bottom: 0.6em;">Description:</p>
       <p style="margin-left: 2rem;">{{DeviceInfo.description}}</p>
     </div>
-    <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="!ledState">
-      Turn On LED
-    </button>
-    <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="ledState">
-      Turn Off LED
-    </button>
+    <!-- <div id="state-button"> -->
+      <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="!ledState">
+        Turn On LED
+      </button>
+      <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="ledState">
+        Turn Off LED
+      </button>
+    <!-- </div> -->
   </div>
 
   <div class="floating">

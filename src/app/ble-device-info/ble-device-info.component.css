@@ -1,22 +1,40 @@
 
+#root-grid{
+    
+}
+
 #basicInfo > div{
     margin: 2vw;
 }
-
-/* p{
-    color: #ff7961;
-}
- */
-.floating{
+#basicInfo{
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    width: 100%;
+    /* align-items: stretch; */
+    max-width: 800px;
+    margin-left: 5%;
+    margin-right: auto; 
 }
+@media screen and (min-width: 1000px) {
+    #basicInfo{
+        flex-direction: row;
+        padding-right: 3rem;
+    }
+    #basicInfo > .textgray{
+        flex-grow: 1;
+        /* width: 66%; */
+    }
+    #basicInfo > button{
+        flex-grow: 2;
+        /* margin: auto 1.5em; */
+        margin: auto;
+        padding: 1.5em 1em;
+    }
+  }
 button{
     margin: 0.5rem auto;
     padding: .1em 1em;
     font-size: 1.5rem;
+    min-width: auto;
 }
 .graph{
     height: 40vh;
@@ -33,9 +51,11 @@ button{
 .graphName{
     margin: 0;
     padding: 0 .8rem 1rem .8rem;
+    font-size: 1.3em;
 }
 
 .graphData{
     flex-grow: 1;
 }
+
 

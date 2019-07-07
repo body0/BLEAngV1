@@ -13,10 +13,10 @@ export class BleDeviceInfoComponent implements OnInit {
 
 
   @Input("bleDeviceInfo")
-  private DeviceInfo:BluttotDeviceInfo;
-  private BrokenConection;
+  public DeviceInfo:BluttotDeviceInfo;
+  public BrokenConection;
   private bleTimer:any; //setInterval
-  private ledState:boolean = false;
+  public ledState:boolean = false;
 
   /* private Hum:number;
   private Temp:number; */

@@ -5,6 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class BleService {
 
+  Device:any;
+
   DEVICE_ADRESS: string;
   TEMPRATURE_DESCRIPTOR_ADDRES: string;
   HUMIDYTY_DESCRIPTOR_ADDRES: string;
@@ -32,6 +34,7 @@ export class BleService {
           services: [this.DEVICE_ADRESS]
         }]
     })
+    this.Device = device;
     var server = await device.gatt.connect();
     var service = await server.getPrimaryService(this.DEVICE_ADRESS);
     var xcx = await service.getCharacteristics();
@@ -43,7 +46,7 @@ export class BleService {
 
     var deviceDescription: BluttotDeviceInfo = {
       name: device.name,
-      description: "TEST DEVICE: esp32 with senzor DHT11 (presure and tempreture) and led diod",
+      description: "TEST DEVICE: esp32 with senzor DHT11 (pressure and temperature) and led diode",
       getTemperatureData: async () => {
         var rawData = await characteristicks[0].readValue();
         var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
@@ -74,6 +77,26 @@ export class BleService {
       }
     };
     return deviceDescription;
+  }
+
+/*   private async conect(){
+    if(this.Device == undefined) 
+      throw new Error("Bad calling of bleservice conect, must be called search first");
+  } */
+
+  public reconect():boolean{
+    if(this.Device == undefined) 
+      return false;
+    this.disconect();
+    this.Device.conect();
+    return true;
+  }
+
+  public async disconect(){
+    if(this.Device == undefined) 
+      return false;
+    await this.Device.disconnect();
+    return true;
   }
 
   public monkSearch(): BluttotDeviceInfo {

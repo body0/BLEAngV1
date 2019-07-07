@@ -18,11 +18,11 @@
 
 .underline{
     width: fit-content;
-    border-bottom: solid #505050 2px;
+    border-bottom: solid #606060 2px;
     /* border-bottom: solid #f44336 2px; */
 }
 .textgray{
-    color: #505050;
+    color: #606060;
 }
 .white-icon {
     color: white;

@@ -15,3 +15,14 @@
   top: 0;
   z-index: 1;
 }
+/* > mat-list-item > */
+.mainlist *{
+  font-size: 1.2em;
+}
+.mainlist mat-list-item{
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+.mainlist  mat-icon{
+  margin-right: 0.8em;
+}
