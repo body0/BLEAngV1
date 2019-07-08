@@ -10,11 +10,11 @@
       </mat-list-item>
       <mat-list-item (click)="disconectEvent()">
         <mat-icon>block</mat-icon>
-        <span>Disconect</span>
+        <span>Disconnect</span>
       </mat-list-item>
       <mat-list-item (click)="reconectEvent()">
         <mat-icon>refresh</mat-icon>
-        <span>Reconect</span>
+        <span>Reconnect</span>
       </mat-list-item>
       <mat-list-item>
         <mat-icon>contact_support</mat-icon>
@@ -24,13 +24,13 @@
       <a mat-list-item href="#">Link 3</a> -->
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content style="background-color: #F0F0F0;">
     <mat-toolbar color="primary">
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon" style="font-size: 2rem;">menu</mat-icon>
       </button>
-      <span style="font-size: 1.5rem; margin-left: 1rem;">Joito Blutooth scanner</span>
+      <span style="font-size: 1.5rem; margin-left: 1rem;">Joito Bluetooth scanner</span>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>
