@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
-import { BluttotDeviceInfo } from '../ble.service';
+import { BluttotDeviceInfo, BleService } from '../ble.service';
 import { RealTimeGraphComponent } from '../real-time-graph/real-time-graph.component';
 
 @Component({
@@ -12,8 +12,9 @@ export class BleDeviceInfoComponent implements OnInit {
   GraphsRef: QueryList<RealTimeGraphComponent>;
 
 
-  @Input("bleDeviceInfo")
-  public DeviceInfo:BluttotDeviceInfo;
+  /* @Input("bleDeviceInfo")
+  public DeviceInfo:BluttotDeviceInfo; */
+  public DeviceInfo:BluttotDeviceInfo = this.bleService.DeviceInfo;
   public BrokenConection;
   private bleTimer:any; //setInterval
   public ledState:boolean = false;
@@ -21,9 +22,12 @@ export class BleDeviceInfoComponent implements OnInit {
   /* private Hum:number;
   private Temp:number; */
 
-  constructor() { 
+  constructor(private bleService: BleService) { 
     /* this.Hum = 0;
     this.Temp = 0; */ 
+    bleService.onConection( () => {
+      this.DeviceInfo = this.bleService.DeviceInfo;
+    });
   }
 
   changeLedState(){

@@ -7,8 +7,8 @@
             <span>Joito Blutooth scanner</span>
           </mat-toolbar> -->
       <div *ngIf="showMode == ShowModeEnum.DeviceInfo" >
-          <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo">
-          </app-ble-device-info>
+          <!-- <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo"></app-ble-device-info> -->
+          <app-ble-device-info></app-ble-device-info>
       </div>
 
       <div *ngIf="showMode == ShowModeEnum.Terminal">

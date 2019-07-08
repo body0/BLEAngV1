@@ -1,6 +1,6 @@
 
 import * as Plotly from 'plotly.js';
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
 import { style } from '@angular/animations';
 
 @Component({
@@ -8,7 +8,7 @@ import { style } from '@angular/animations';
   templateUrl: './real-time-graph.component.html',
   styleUrls: ['./real-time-graph.component.css']
 })
-export class RealTimeGraphComponent implements OnInit{
+export class RealTimeGraphComponent implements OnInit, OnDestroy{
 
   GraphElm:HTMLElement;
   LocalGraphCount:number;
@@ -47,6 +47,10 @@ export class RealTimeGraphComponent implements OnInit{
     for(let i = 0; i<toolBar.length; i++){
       toolBar[i].setAttribute("style", "display: none !important;");
     }   
+  }
+
+  ngOnDestroy(){
+    RealTimeGraphComponent.GlobalGraphCount--;
   }
 
   writeDataToGraph(data:number):void {

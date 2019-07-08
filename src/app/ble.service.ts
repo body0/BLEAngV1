@@ -8,6 +8,7 @@ export class BleService {
 
   Device: any;
   DeviceInfo: BluttotDeviceInfo;
+  DisconetEventWraper: any;
 
   DEVICE_ADRESS: string;
   TEMPRATURE_DESCRIPTOR_ADDRES: string;
@@ -42,6 +43,14 @@ export class BleService {
         }]
     })
     this.Device = device;
+    return this.conect();
+  }
+
+  private async conect() {
+    if (this.Device == undefined)
+      throw new Error("Bad calling of bleservice conect, must be called search first");
+
+    var device = this.Device;
     var server = await device.gatt.connect();
     this.conectCallback.forEach(callBack => {
       callBack();
@@ -65,6 +74,7 @@ export class BleService {
         });
       }
     }
+    this.DisconetEventWraper = disconetEventWraper;
     var deviceDescription: BluttotDeviceInfo = {
       name: device.name,
       description: "TEST DEVICE: esp32 with senzor DHT11 (pressure and temperature) and led diode",
@@ -101,7 +111,7 @@ export class BleService {
           var rawData = await characteristicks[2].readValue();
           var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
           //console.log(rawData.getUint8(0))
-          console.log(strData)
+          //console.log(strData)
           return (strData == '1') ? true : false;
         }
         catch (err) {
@@ -116,7 +126,7 @@ export class BleService {
             characteristicks[2].writeValue(enc.encode("1"));
           else
             characteristicks[2].writeValue(enc.encode("0"));
-        } 
+        }
         catch (err) {
           disconetEventWraper();
           throw err;
@@ -127,23 +137,21 @@ export class BleService {
     return deviceDescription;
   }
 
-  /*   private async conect(){
-      if(this.Device == undefined) 
-        throw new Error("Bad calling of bleservice conect, must be called search first");
-    } */
-
-  public reconect(): boolean {
+  public async reconect() {
     if (this.Device == undefined)
       return false;
-    this.disconect();
-    this.Device.conect();
+    //await this.Device.gatt.disconnect();
+    //var v = await this.Device.gatt.connect();
+    var v = await this.conect();
+    console.log("Conection" + v);
     return true;
   }
 
   public async disconect() {
     if (this.Device == undefined)
       return false;
-    await this.Device.disconnect();
+    this.DisconetEventWraper();
+    await this.Device.gatt.disconnect();
     return true;
   }
 

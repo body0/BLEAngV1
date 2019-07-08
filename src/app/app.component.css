@@ -6,12 +6,6 @@ mat-toolbar{
 mat-toolbar span{
     color: #404040;
 }
-/* #rootElm{
-    height: 100%;
-    width: 100%;
-    background-color: goldenrod;
-} */
-
 .mat-icon {
     font-size: 2rem;
 }
@@ -19,6 +13,7 @@ mat-toolbar span{
 #noDeviceSelected > div{
     font-size: 3rem;
     color: var(greyCol);
+    margin: 0 2rem;
 }
 #noDeviceSelected > div > p{
     text-align: center;
