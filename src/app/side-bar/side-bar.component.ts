@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { BleService } from '../ble.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -9,7 +10,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./side-bar.component.css']
 })
 export class SideBarComponent {
-
+  public deviceConected:boolean = false;
   @Output("userAction") 
   event = new EventEmitter<userActionEventEnum>();
 
@@ -18,7 +19,17 @@ export class SideBarComponent {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private bleService:BleService) {
+      var sub = this;
+      this.bleService.onConection( () => {
+        sub.deviceConected = true;
+      });
+      this.bleService.onDisconect( () => {
+        sub.deviceConected = false;
+      });
+    }
 
   searchEvent(){
     this.event.emit(userActionEventEnum.Search);
@@ -29,8 +40,17 @@ export class SideBarComponent {
   reconectEvent(){
     this.event.emit(userActionEventEnum.Reconect);
   }
+  infoEvent(){
+    this.event.emit(userActionEventEnum.DeviceInfo);
+  }
+  terminalEvent(){
+    this.event.emit(userActionEventEnum.Terminal);
+  }
+  supprotEvent(){
+    this.event.emit(userActionEventEnum.Support);
+  }
 
 }
 export enum userActionEventEnum{
-  Search, Disconect, Reconect
+  Search, Disconect, Reconect, Support, DeviceInfo, Terminal
 }

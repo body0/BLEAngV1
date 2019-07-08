@@ -6,12 +6,20 @@
             </button>
             <span>Joito Blutooth scanner</span>
           </mat-toolbar> -->
-      <div *ngIf="showDevice" >
+      <div *ngIf="showMode == ShowModeEnum.DeviceInfo" >
           <app-ble-device-info [bleDeviceInfo]="bleDeviceInfo">
           </app-ble-device-info>
       </div>
-    
-      <div *ngIf="!showDevice" class="floating" >
+
+      <div *ngIf="showMode == ShowModeEnum.Terminal">
+          <app-terminal></app-terminal>
+      </div>
+
+      <div *ngIf="showMode == ShowModeEnum.Support">
+          <app-support></app-support>
+      </div>
+
+      <div *ngIf="showMode == ShowModeEnum.NoDeviceSelected" class="floating" >
         <div id="noDeviceSelected">
           <div>
             <p>
@@ -23,6 +31,8 @@
           </div>
         </div>
       </div>
+
+      
       <div style="height: 15vw;"></div>
     </div>
   </app-side-bar>

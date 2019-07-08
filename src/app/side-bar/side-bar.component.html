@@ -8,6 +8,14 @@
         <mat-icon style="font-size: 1.5em;">search</mat-icon>
         <span>Search</span>
       </mat-list-item>
+      <mat-list-item (click)="infoEvent()">
+        <mat-icon>info</mat-icon>
+        <span>Device Data</span>
+      </mat-list-item>
+      <mat-list-item (click)="terminalEvent()">
+        <mat-icon>code</mat-icon>
+        <span>Terminal</span>
+      </mat-list-item>
       <mat-list-item (click)="disconectEvent()">
         <mat-icon>block</mat-icon>
         <span>Disconnect</span>
@@ -16,7 +24,7 @@
         <mat-icon>refresh</mat-icon>
         <span>Reconnect</span>
       </mat-list-item>
-      <mat-list-item>
+      <mat-list-item (click)="supprotEvent()">
         <mat-icon>contact_support</mat-icon>
         <span>Support</span>
       </mat-list-item>
@@ -30,7 +38,16 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon" style="font-size: 2rem;">menu</mat-icon>
       </button>
-      <span style="font-size: 1.5rem; margin-left: 1rem;">Joito Bluetooth scanner</span>
+      <!-- <span style="font-size: 1.5rem; margin-left: 1rem;">Joito Bluetooth scanner</span> -->
+      <span style="font-size: 1.5rem; margin-left: 1rem;">Joito</span>
+      <div *ngIf="deviceConected" style="position: absolute; right: 2rem; height: 100%; color: #87BC47; display: flex; align-items:center;">
+          <mat-icon>brightness_1</mat-icon>
+          <span style="margin-left:1rem;">Conected</span>
+      </div>
+      <div *ngIf="!deviceConected" style="position: absolute; right: 2rem; height: 100%; color: #f44336; display: flex; align-items:center;">
+          <mat-icon>brightness_1</mat-icon>
+          <span style="margin-left:1rem;">Disconected</span>
+      </div>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

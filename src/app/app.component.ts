@@ -10,16 +10,17 @@ import { userActionEventEnum } from './side-bar/side-bar.component';
 export class AppComponent implements OnInit {
   title = 'BLE';
 
-  showDevice: boolean = false;
-  bleDeviceInfo:BluttotDeviceInfo;
+  showMode: ShowMode = ShowMode.NoDeviceSelected;
+  ShowModeEnum: any = ShowMode;
+  bleDeviceInfo: BluttotDeviceInfo;
 
-  sideMenuID:string = "sidebar";
-  sideMenuMaxWidth:string = "45wv";
-  sideMenuElm:Element;
+  sideMenuID: string = "sidebar";
+  sideMenuMaxWidth: string = "45wv";
+  sideMenuElm: Element;
 
   constructor(
-    private bleService:BleService
-  ){
+    private bleService: BleService
+  ) {
     this.bleDeviceInfo = this.bleService.monkSearch();
 
     //ONLY FOR TEST 
@@ -30,21 +31,21 @@ export class AppComponent implements OnInit {
     this.sideMenuElm = document.getElementById(this.sideMenuID);
   }
 
-  searchDevice():void{
+  searchDevice(): void {
     const sub = this;
     //this.showDevice = !this.showDevice;
-    this.bleService.search().then( bleDeviceInfo => {
+    this.bleService.search().then(bleDeviceInfo => {
       sub.bleDeviceInfo = bleDeviceInfo;
-      sub.showDevice = !sub.showDevice;
+      sub.showMode = ShowMode.DeviceInfo;
     })
 
   }
-  showMenu():void{
+  showMenu(): void {
     this.sideMenuElm.setAttribute("style", 'width: ' + this.sideMenuMaxWidth + ";")
   }
 
-  onUserAction(event:userActionEventEnum){
-    switch(event){
+  onUserAction(event: userActionEventEnum) {
+    switch (event) {
       case userActionEventEnum.Search:
         this.searchDevice();
         break;
@@ -54,7 +55,21 @@ export class AppComponent implements OnInit {
       case userActionEventEnum.Disconect:
         this.bleService.disconect();
         break;
+      case userActionEventEnum.Terminal:
+        if (this.bleService.DeviceInfo != null)
+          this.showMode = ShowMode.Terminal;
+        break;
+      case userActionEventEnum.DeviceInfo:
+        if (this.bleService.DeviceInfo != null)
+          this.showMode = ShowMode.DeviceInfo;
+        break;
+      case userActionEventEnum.Support:
+        this.showMode = ShowMode.Support;
+        break;
     }
   }
-    
+
+}
+enum ShowMode {
+  NoDeviceSelected, DeviceInfo, Terminal, Support
 }

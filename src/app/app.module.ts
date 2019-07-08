@@ -11,7 +11,9 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
+import { TerminalComponent } from './terminal/terminal.component';
+import { SupportComponent } from './support/support.component'
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { environment } from '../environments/environment'
     MainButtonComponent,
     BleDeviceInfoComponent,
     RealTimeGraphComponent,
-    SideBarComponent
+    SideBarComponent,
+    TerminalComponent,
+    SupportComponent
   ],
   imports: [
     BrowserModule,
