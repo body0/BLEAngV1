@@ -35,7 +35,15 @@
       
       <div style="height: 15vw;"></div>
     </div>
+
+    <button mat-mini-fab aria-label="Search Bng utton" color="accent" class="fixedButtonCircle" (click)="searchDevice()"><!-- fixed main button  -->
+      <mat-icon style="display: inline; font-size: 3.5rem;">search</mat-icon>
+    </button>
   </app-side-bar>
+
+  <app-footer-notification [@openClose]="ShowWarning ? 'open' : 'closed'">
+    <p>{{ShowWarningMesaage}}</p>
+  </app-footer-notification>
 
 
 <!-- <div id="sidebar">
@@ -53,6 +61,3 @@
   </div>
 </button> -->
 
-<button mat-mini-fab aria-label="Search Bng utton" color="accent" class="fixedButtonCircle" (click)="searchDevice()"><!-- fixed main button  -->
-  <mat-icon style="display: inline; font-size: 3.5rem;">search</mat-icon>
-</button>

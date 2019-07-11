@@ -13,7 +13,8 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { TerminalComponent } from './terminal/terminal.component';
-import { SupportComponent } from './support/support.component'
+import { SupportComponent } from './support/support.component';
+import { FooterNotificationComponent } from './footer-notification/footer-notification.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SupportComponent } from './support/support.component'
     RealTimeGraphComponent,
     SideBarComponent,
     TerminalComponent,
-    SupportComponent
+    SupportComponent,
+    FooterNotificationComponent
   ],
   imports: [
     BrowserModule,
