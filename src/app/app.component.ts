@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   title = 'BLE';
 
   showMode: ShowMode = ShowMode.NoDeviceSelected;
+  /* showMode: ShowMode = ShowMode.Terminal; */
   ShowModeEnum: any = ShowMode;
   bleDeviceInfo: BluttotDeviceInfo;
 
@@ -35,8 +36,10 @@ export class AppComponent implements OnInit {
     const sub = this;
     //this.showDevice = !this.showDevice;
     this.bleService.search().then(bleDeviceInfo => {
-      sub.bleDeviceInfo = bleDeviceInfo;
-      sub.showMode = ShowMode.DeviceInfo;
+      if(sub.bleService != undefined && sub.bleService.DeviceInfo.conected){
+        sub.bleDeviceInfo = bleDeviceInfo;
+        sub.showMode = ShowMode.DeviceInfo;
+      } 
     })
 
   }

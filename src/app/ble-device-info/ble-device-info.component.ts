@@ -14,7 +14,8 @@ export class BleDeviceInfoComponent implements OnInit {
 
   /* @Input("bleDeviceInfo")
   public DeviceInfo:BluttotDeviceInfo; */
-  public DeviceInfo:BluttotDeviceInfo = this.bleService.DeviceInfo;
+  //public DeviceInfo:BluttotDeviceInfo = this.bleService.DeviceInfo;
+  public DeviceInfo:BluttotDeviceInfo;
   public BrokenConection;
   private bleTimer:any; //setInterval
   public ledState:boolean = false;
