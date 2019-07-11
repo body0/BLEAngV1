@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
     const sub = this;
     //this.showDevice = !this.showDevice;
     this.bleService.search().then(bleDeviceInfo => {
-      if (sub.bleService.DeviceInfo != undefined && sub.bleService.DeviceInfo.conected) {
+      if (sub.bleService.DeviceInfo != undefined && sub.bleService.DeviceInfo.conected && (sub.showMode == ShowMode.NoDeviceSelected || sub.showMode == ShowMode.Support) ) {
         //sub.bleDeviceInfo = bleDeviceInfo;
         sub.showMode = ShowMode.DeviceInfo;
       }

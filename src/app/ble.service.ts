@@ -21,6 +21,8 @@ export class BleService {
 
   private conectCallback: any[] = [];
   private disconectCallback: any[] = [];
+  private callBackList = [];
+  private mesage = "";
 
   constructor() {
     /* this.DEVICE_ADRESS = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
@@ -57,6 +59,8 @@ export class BleService {
       })
       this.Device = device;
       let sub = this;
+
+      var server = await device.gatt.connect();
       device.addEventListener('gattserverdisconnected', () => {
         if (sub.DeviceInfo.conected) {
           sub.DeviceInfo.conected = false;
@@ -65,7 +69,130 @@ export class BleService {
           });
         }
       });
-      return this.conect();
+      var service = await server.getPrimaryService(this.DEVICE_ADRESS);
+      //var xcx = await service.getCharacteristics();
+      var characteristicks = await Promise.all([
+        service.getCharacteristic(this.TEMPRATURE_DESCRIPTOR_ADDRES),
+        service.getCharacteristic(this.HUMIDYTY_DESCRIPTOR_ADDRES),
+        service.getCharacteristic(this.LED_DESCRIPTOR_ADDRES)
+      ]);
+      var seriaPortService = await server.getPrimaryService(this.SERIAL_PORT_SERVICE_UUID);
+      //var xcx = await service.getCharacteristics();
+      var seriaPortcharacteristicks = await Promise.all([
+        seriaPortService.getCharacteristic(this.TX_CHARACTERISTIC_UUID),
+        seriaPortService.getCharacteristic(this.RX_CHARACTERISTIC_UUID)
+      ]);
+      try {
+        //console.log(await seriaPortcharacteristicks[0].getDescriptors());
+        await seriaPortcharacteristicks[0].startNotifications();
+      }
+      catch (err) {
+        console.error(err);
+      }
+
+      seriaPortcharacteristicks[0].addEventListener('characteristicvaluechanged', (event) => {
+        let value = event.target.value;
+        var strData = String.fromCharCode.apply(null, new Uint8Array(value.buffer));
+        if (strData == "!") {
+          sub.callBackList.forEach(callBack => {
+            callBack(sub.mesage);
+          });
+          sub.mesage = "";
+        }
+        else {
+          sub.mesage = sub.mesage + strData;
+        }
+      });
+
+
+
+      var enc = new TextEncoder();
+      var deviceDescription: BluttotDeviceInfo = {
+        name: device.name,
+        description: "TEST DEVICE: esp32 with senzor DHT11 (pressure and temperature) and led diode",
+        conected: true,
+        getTemperatureData: async () => {
+          try {
+            var rawData = await characteristicks[0].readValue();
+            var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
+            //console.log(rawData.getUint8(0))
+            //console.log(strData)
+            return parseFloat(strData);
+          }
+          catch (err) {
+            /*  if (deviceDescription.conected)
+               sub.disconetEventWraper(); */
+            throw err;
+          }
+
+        },
+        getHumidytyData: async () => {
+          try {
+            var rawData = await characteristicks[1].readValue();
+            var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
+            //console.log(rawData.getUint8(0))
+            //console.log(strData)
+            return parseFloat(strData);
+          }
+          catch (err) {
+            /* if (deviceDescription.conected)
+              sub.disconetEventWraper(); */
+            throw err;
+          }
+        },
+        getLedData: async () => {
+          try {
+            var rawData = await characteristicks[2].readValue();
+            var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
+            //console.log(rawData.getUint8(0))
+            //console.log(strData)
+            return (strData == '1') ? true : false;
+          }
+          catch (err) {
+            /* if (deviceDescription.conected)
+              sub.disconetEventWraper(); */
+            throw err;
+          }
+        },
+        setLedData: (state: boolean) => {
+          try {
+
+            if (state)
+              characteristicks[2].writeValue(enc.encode("1"));
+            else
+              characteristicks[2].writeValue(enc.encode("0"));
+          }
+          catch (err) {
+            /* if (deviceDescription.conected)
+              sub.disconetEventWraper(); */
+            throw err;
+          }
+        },
+        async serialWrite(data) {
+          //var enc = new TextEncoder();
+          for (var i = 0; i < data.length; i++) {
+            await seriaPortcharacteristicks[1].writeValue(enc.encode(data.charAt(i)));
+          }
+          await seriaPortcharacteristicks[1].writeValue(enc.encode('!'));
+        },
+        serialReadCallbackRegister(callBack) {
+          sub.callBackList.push(callBack);
+          let removed = false;
+          return () => {
+            if (!removed) {
+              for (let i = 0; i < sub.callBackList.length; i++) {
+                if (sub.callBackList[i] === callBack)
+                  sub.callBackList.splice(i, 1);
+              }
+              removed = true;
+            }
+          }
+        }
+
+      };
+      this.DeviceInfo = deviceDescription;
+      this.conect();
+      return deviceDescription;
     }
     catch (err) {
       console.warn("WARINGI: NO DEVICE SELECTED", err);
@@ -117,10 +244,21 @@ export class BleService {
     return bleDeviceInfo;
   }
 
-  public onConection(callback: () => void) {
-    if(this.DeviceInfo != undefined && this.DeviceInfo.conected)
+  public onConection(callback: () => void): () => void {
+    if (this.DeviceInfo != undefined && this.DeviceInfo.conected)
       callback();
     this.conectCallback.push(callback);
+    let removed = false;
+    let sub = this;
+    return () => {
+      if (!removed) {
+        for (let i = 0; i < sub.conectCallback.length; i++) {
+          if (sub.conectCallback[i] === callback)
+            sub.conectCallback.splice(i, 1);
+        }
+        removed = true;
+      }
+    }
   }
   public onDisconect(callback: () => void) {
     this.disconectCallback.push(callback);
@@ -130,10 +268,8 @@ export class BleService {
   private async conect() {
     if (this.Device == undefined)
       throw new Error("Bad calling of bleservice conect, must be called search first");
-
-    var device = this.Device;
-    var server = await device.gatt.connect();
-
+    
+    var server = await this.Device.gatt.connect();
     var service = await server.getPrimaryService(this.DEVICE_ADRESS);
     //var xcx = await service.getCharacteristics();
     var characteristicks = await Promise.all([
@@ -147,111 +283,12 @@ export class BleService {
       seriaPortService.getCharacteristic(this.TX_CHARACTERISTIC_UUID),
       seriaPortService.getCharacteristic(this.RX_CHARACTERISTIC_UUID)
     ]);
-    try {
-      //console.log(await seriaPortcharacteristicks[0].getDescriptors());
-      await seriaPortcharacteristicks[0].startNotifications();
-    }
-    catch (err) {
-      console.error(err);
-    }
-    seriaPortcharacteristicks[0].addEventListener('characteristicvaluechanged', onData);
+    this.DeviceInfo.conected = true;
 
-    var callBackList = [];
-    var mesage = "";
-    function onData(event) {
-      let value = event.target.value;
-      var strData = String.fromCharCode.apply(null, new Uint8Array(value.buffer));
-      if (strData == "!") {
-        callBackList.forEach(callBack => {
-          callBack(mesage);
-        });
-        mesage = "";
-      }
-      else {
-        mesage = mesage + strData;
-      }
-    }
-
-    let sub = this;
-    var enc = new TextEncoder();
-    var deviceDescription: BluttotDeviceInfo = {
-      name: device.name,
-      description: "TEST DEVICE: esp32 with senzor DHT11 (pressure and temperature) and led diode",
-      conected: true,
-      getTemperatureData: async () => {
-        try {
-          var rawData = await characteristicks[0].readValue();
-          var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
-          //console.log(rawData.getUint8(0))
-          //console.log(strData)
-          return parseFloat(strData);
-        }
-        catch (err) {
-         /*  if (deviceDescription.conected)
-            sub.disconetEventWraper(); */
-          throw err;
-        }
-
-      },
-      getHumidytyData: async () => {
-        try {
-          var rawData = await characteristicks[1].readValue();
-          var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
-          //console.log(rawData.getUint8(0))
-          //console.log(strData)
-          return parseFloat(strData);
-        }
-        catch (err) {
-          /* if (deviceDescription.conected)
-            sub.disconetEventWraper(); */
-          throw err;
-        }
-      },
-      getLedData: async () => {
-        try {
-          var rawData = await characteristicks[2].readValue();
-          var strData = String.fromCharCode.apply(null, new Uint8Array(rawData.buffer));
-          //console.log(rawData.getUint8(0))
-          //console.log(strData)
-          return (strData == '1') ? true : false;
-        }
-        catch (err) {
-          /* if (deviceDescription.conected)
-            sub.disconetEventWraper(); */
-          throw err;
-        }
-      },
-      setLedData: (state: boolean) => {
-        try {
-
-          if (state)
-            characteristicks[2].writeValue(enc.encode("1"));
-          else
-            characteristicks[2].writeValue(enc.encode("0"));
-        }
-        catch (err) {
-          /* if (deviceDescription.conected)
-            sub.disconetEventWraper(); */
-          throw err;
-        }
-      },
-      async serialWrite(data) {
-        //var enc = new TextEncoder();
-        for (var i = 0; i < data.length; i++) {
-          await seriaPortcharacteristicks[1].writeValue(enc.encode(data.charAt(i)));
-        }
-        await seriaPortcharacteristicks[1].writeValue(enc.encode('!'));
-      },
-      serialReadCallbackRegister(callBack) {
-        callBackList.push(callBack);
-      }
-
-    };
-    this.DeviceInfo = deviceDescription;
     this.conectCallback.forEach(callBack => {
       callBack();
     });
-    return deviceDescription;
+    ///return deviceDescription;
   }
 
   private disconetEventWraper() {

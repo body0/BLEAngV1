@@ -1,9 +1,9 @@
 <div id="rootgrid">
   <div class="floating" id="basicInfo">
     <div class="textgray">
-      <h2 class="underline" style="margin-bottom: 0.3rem;">Name: {{DeviceInfo.name}}</h2>
+      <h2 class="underline" style="margin-bottom: 0.3rem;">Name: {{bleService.DeviceInfo.name}}</h2>
       <p style="font-weight: bold; margin-bottom: 0.6em;">Description:</p>
-      <p style="margin-left: 2rem;">{{DeviceInfo.description}}</p>
+      <p style="margin-left: 2rem;">{{bleService.DeviceInfo.description}}</p>
     </div>
     <!-- <div id="state-button"> -->
       <button mat-raised-button color="accent" (click)="changeLedState()" *ngIf="!ledState">

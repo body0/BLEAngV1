@@ -15,7 +15,7 @@ export class BleDeviceInfoComponent implements OnInit {
   /* @Input("bleDeviceInfo")
   public DeviceInfo:BluttotDeviceInfo; */
   //public DeviceInfo:BluttotDeviceInfo = this.bleService.DeviceInfo;
-  public DeviceInfo:BluttotDeviceInfo;
+  //public DeviceInfo:BluttotDeviceInfo;
   public BrokenConection;
   private bleTimer:any; //setInterval
   public ledState:boolean = false;
@@ -27,23 +27,23 @@ export class BleDeviceInfoComponent implements OnInit {
     /* this.Hum = 0;
     this.Temp = 0; */ 
     bleService.onConection( () => {
-      this.DeviceInfo = this.bleService.DeviceInfo;
+      //this.DeviceInfo = this.bleService.DeviceInfo;
     });
   }
 
   changeLedState(){
-    this.DeviceInfo.setLedData(!this.ledState);
+    this.bleService.DeviceInfo.setLedData(!this.ledState);
     this.ledState = !this.ledState;
   }
 
   ngOnInit() {
-    this.DeviceInfo.getLedData().then( data => { this.ledState = data; });
+    this.bleService.DeviceInfo.getLedData().then( data => { this.ledState = data; });
     this.bleTimer = setInterval(bleTimerCallack, 1000); 
-    console.log(this.DeviceInfo);
+    //console.log(this.DeviceInfo);
 
     const sub = this;
     function bleTimerCallack(){
-      sub.DeviceInfo.getTemperatureData()
+      sub.bleService.DeviceInfo.getTemperatureData()
       .then( (data:number) => {
         //console.log(sub.Temp, " a");
         //update graph
@@ -56,7 +56,7 @@ export class BleDeviceInfoComponent implements OnInit {
         sub.BrokenConection = true;
       });
 
-      sub.DeviceInfo.getHumidytyData()
+      sub.bleService.DeviceInfo.getHumidytyData()
       .then( (data:number) => {
        //console.log(data, " b");
         //update graph
